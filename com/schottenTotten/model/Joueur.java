@@ -6,11 +6,11 @@ import java.util.List;
 public abstract class Joueur {
 
     private final String nom;
-    protected final List<Carte> CartesJoueur;
+    protected final List<Carte> cartesJoueur;
 
     public Joueur(String nom) {
         this.nom = nom;
-        this.CartesJoueur = new ArrayList<>();
+        this.cartesJoueur = new ArrayList<>();
     }
 
     public String getNom() {
@@ -18,19 +18,24 @@ public abstract class Joueur {
     }
 
     public List<Carte> getCartesJoueur() {
-        return CartesJoueur;
+        return new ArrayList<>(cartesJoueur);
     }
 
     public void ajouterCarte(Carte carte) {
-        CartesJoueur.add(carte);
+        if (carte != null) {
+            cartesJoueur.add(carte);
+        }
     }
 
-    public Carte retirerCarte(int index) {
-        return CartesJoueur.remove(index);
+    public Carte retirerCarte(int index) throws Exception {
+        if (index >= 0 && index < cartesJoueur.size()) {
+            return cartesJoueur.remove(index);
+        }
+        return null;
     }
 
     public boolean aEncoreDesCartes() {
-        return !CartesJoueur.isEmpty();
+        return !cartesJoueur.isEmpty();
     }
 
     @Override

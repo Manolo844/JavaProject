@@ -28,10 +28,10 @@ public abstract class Joueur {
     }
 
     public Carte retirerCarte(int index) throws Exception {
-        if (index >= 0 && index < cartesJoueur.size()) {
-            return cartesJoueur.remove(index);
+        if (index < 0 || index >= cartesJoueur.size()) {
+            throw new Exception("Index invalide : impossible de jouer cette carte.");
         }
-        return null;
+        return cartesJoueur.remove(index);
     }
 
     public boolean aEncoreDesCartes() {

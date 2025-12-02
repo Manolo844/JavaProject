@@ -23,8 +23,14 @@ public class App {
         System.out.print("Entrez le nom du Joueur 2 : ");
         String nomJ2 = scanner.nextLine();
 
-        // Lancement en mode normal (false)
-        jeu.initialisationJeu(nomJ1, nomJ2, false);
+        System.out.print("Activer la variante tactique ? (o/n) : ");
+        String choixVariante = scanner.nextLine().trim().toLowerCase();
+
+        boolean varianteTactique = choixVariante.equals("o");
+
+        // Lancement du jeu avec ou sans variante
+        jeu.initialisationJeu(nomJ1, nomJ2, varianteTactique);
+
         System.out.println("\nLa partie commence !");
 
         boolean partieTerminee = false;

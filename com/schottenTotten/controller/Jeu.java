@@ -68,6 +68,8 @@ public class Jeu {
             throw e;
         }
 
+        verifierRevendications();
+
         if (!pioche.estVide()) {
             joueurActuel.ajouterCarte(pioche.piocher());
         }
@@ -86,5 +88,52 @@ public class Jeu {
 
     public Borne[] getBornes() { 
         return bornes; 
+    }
+
+    private void verifierRevendications() {
+        for (Borne b : bornes) {
+            if (!b.estRevendiquee() && b.estComplete()) {
+                int gagnantIndex = b.determinerGagnantLocal(); 
+                
+                Joueur gagnant = joueurs.get(gagnantIndex);
+                b.setProprietaire(gagnant);
+                
+                System.out.println(">>> LA BORNE " + b.getIndex() + " EST GAGNÉE PAR " + gagnant.getNom() + " !");
+            }
+        }
+    }
+
+    public Joueur verifierVictoire() {
+        int bornesJ1 = 0;
+        int bornesJ2 = 0;
+
+        for (Borne b : bornes) {
+            if (b.getProprietaire() == joueurs.get(0)) bornesJ1++;
+            if (b.getProprietaire() == joueurs.get(1)) bornesJ2++;
+        }
+
+        if (bornesJ1 >= 5) return joueurs.get(0);
+        if (bornesJ2 >= 5) return joueurs.get(1);
+
+        int suiteJ1 = 0;
+        int suiteJ2 = 0;
+
+        for (Borne b : bornes) {
+            if (b.getProprietaire() == joueurs.get(0)) {
+                suiteJ1++;
+                suiteJ2 = 0;
+            } else if (b.getProprietaire() == joueurs.get(1)) {
+                suiteJ2++;
+                suiteJ1 = 0;
+            } else { 
+                suiteJ1 = 0;
+                suiteJ2 = 0;
+            }
+
+            if (suiteJ1 >= 3) return joueurs.get(0);
+            if (suiteJ2 >= 3) return joueurs.get(1);
+        }
+
+        return null; 
     }
 }

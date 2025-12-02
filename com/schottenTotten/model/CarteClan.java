@@ -9,6 +9,7 @@ public class CarteClan extends Carte{
         this.valeur = valeur;
     }
 
+    @Override
     public Couleur getCouleur() {
         return couleur;
     }

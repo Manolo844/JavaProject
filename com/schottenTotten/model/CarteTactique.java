@@ -21,4 +21,11 @@ public class CarteTactique extends Carte {
     public String getNom() {
         return type.toString();
     }
+
+    @Override
+    public Couleur getCouleur() {
+        return null;
+    }
+
+    
 }

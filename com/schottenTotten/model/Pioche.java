@@ -26,4 +26,14 @@ public class Pioche {
     public int taille() {
         return cartes.size();
     }
+
+    public void ajouterCartes(List<Carte> nouvellesCartes) {
+        this.cartes.addAll(nouvellesCartes);
+    }
+
+    public void melanger() {
+        Collections.shuffle(this.cartes);
+    }
+
+    
 }

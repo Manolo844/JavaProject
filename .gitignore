@@ -1,0 +1,11 @@
+# Fichiers compilés
+*.class
+bin/
+
+# Dossiers temporaires VS Code
+.vscode/
+
+# Librairies externes (les jar que tu as téléchargés)
+# (Optionnel : tu peux les laisser si tu veux que le prof les ait direct)
+lib/
+*.jar

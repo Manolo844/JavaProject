@@ -1,10 +1,9 @@
 package com.schottenTotten.view;
 
+import com.schottenTotten.ai.*;
+import com.schottenTotten.controller.JeuFactory;
 import com.schottenTotten.controller.Jeu;
-import com.schottenTotten.model.Borne;
-import com.schottenTotten.model.Carte;
-import com.schottenTotten.model.Joueur;
-
+import com.schottenTotten.model.*;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,73 +14,128 @@ public class App {
         Jeu jeu = new Jeu();
 
         System.out.println("=========================================");
-        System.out.println("   SCHOTTEN TOTTEN - VERSION CONSOLE");
+        System.out.println("   SCHOTTEN TOTTEN - IA & TACTIQUE");
         System.out.println("=========================================");
 
-        System.out.print("Entrez le nom du Joueur 1 : ");
+        System.out.print("Nom du Joueur 1 (Vous) : ");
         String nomJ1 = scanner.nextLine();
-        System.out.print("Entrez le nom du Joueur 2 : ");
-        String nomJ2 = scanner.nextLine();
+        
+        String nomJ2 = "";
+        
+        while(true) {
+            System.out.println("Qui sera le Joueur 2 ?");
+            System.out.println("1. Une IA");
+            System.out.println("2. Un joueur humain");
+            System.out.print("Votre choix (1 ou 2) : ");
+            
+            String choixAdv = scanner.nextLine().trim();
+            
+            if (choixAdv.equals("1")) {
+                nomJ2 = "IA"; 
+                break;
+            } else if (choixAdv.equals("2")) {
+                System.out.print("Entrez le nom du Joueur 2 : ");
+                nomJ2 = scanner.nextLine();
+                if (nomJ2.equalsIgnoreCase("IA")) {
+                    nomJ2 = "Joueur 2"; 
+                }
+                break;
+            } else {
+                System.out.println("Choix invalide, réessayez.");
+            }
+        }
 
-        // Lancement en mode normal (false)
-        jeu.initialisationJeu(nomJ1, nomJ2, false);
-        System.out.println("\nLa partie commence !");
+        System.out.print("Activer la variante tactique ? (o/n) : ");
+        String repVar = scanner.nextLine();
+        boolean variante = repVar.equalsIgnoreCase("o");
+
+        boolean j2EstIA = nomJ2.equals("IA");
+        jeu = JeuFactory.creerPartie(variante, nomJ1, nomJ2, j2EstIA);
+        System.out.println("\nLa partie commence!");
 
         boolean partieTerminee = false;
 
         while (!partieTerminee) {
-            // 1. Afficher l'état du jeu
             afficherPlateau(jeu);
 
-            // 2. Identifier le joueur courant
             Joueur joueurActuel = jeu.getJoueurCourant();
-            System.out.println("\n-----------------------------------------");
-            System.out.println("TOUR DE : " + joueurActuel.getNom());
             
-            // 3. Afficher sa main
-            System.out.println("Votre main :");
-            List<Carte> main = joueurActuel.getCartesJoueur();
-            for (int i = 0; i < main.size(); i++) {
-                System.out.println("  [" + i + "] " + main.get(i).toString());
-            }
-
-            // 4. Demander le coup
-            try {
-                System.out.print("\n> Quelle carte jouer (numéro index) ? ");
-                String inputCarte = scanner.nextLine();
-                int indexCarte = Integer.parseInt(inputCarte);
-
-                System.out.print("> Sur quelle borne (1 à 9) ? ");
-                String inputBorne = scanner.nextLine();
-                int numBorne = Integer.parseInt(inputBorne);
+            //IA
+            if (joueurActuel instanceof JoueurIA) {
+                System.out.println("\n--- TOUR DE L'IA (" + joueurActuel.getNom() + ") ---");
+                try {
+                    jeu.jouerTourIA(); 
+                } catch (Exception e) {
+                    System.out.println("Erreur IA : " + e.getMessage());
+                    // Si l'IA plante (ex: tactique illégale), on passe le tour pour éviter boucle infinie
+                    jeu.finirTour(); 
+                }
+            } 
+            
+            // Humain
+            else {
+                System.out.println("\n--- C'est à " + joueurActuel.getNom() + " de jouer ---");
                 
-                // Conversion 1-9 (utilisateur) vers 0-8 (tableau)
-                int indexBorne = numBorne - 1;
-
-                // 5. Exécuter le coup via le contrôleur
-                jeu.jouerTour(indexCarte, indexBorne);
-
-                // 6. Vérifier si quelqu'un a gagné
-                Joueur gagnant = jeu.verifierVictoire();
-                if (gagnant != null) {
-                    System.out.println("\n=========================================");
-                    System.out.println(" VICTOIRE !!! " + gagnant.getNom() + " remporte la partie !");
-                    System.out.println("=========================================");
-                    afficherPlateau(jeu); // Affichage final
-                    partieTerminee = true;
+                System.out.println("Votre main :");
+                List<Carte> main = joueurActuel.getCartesJoueur();
+                for (int i = 0; i < main.size(); i++) {
+                    System.out.println("  [" + i + "] " + main.get(i).toString());
                 }
 
-            } catch (NumberFormatException e) {
-                System.out.println(">>> ERREUR : Veuillez entrer un chiffre valide !");
-            } catch (Exception e) {
-                System.out.println(">>> ERREUR JEU : " + e.getMessage());
-                // On ne change pas de joueur, la boucle recommence
+                try {
+                    System.out.print("\n> Quelle carte jouer (index) ? ");
+                    int cIdx = Integer.parseInt(scanner.nextLine());
+                    System.out.print("> Sur quelle borne (1-9) ? ");
+                    int bIdx = Integer.parseInt(scanner.nextLine()) - 1;
+                    
+                    jeu.poserCarte(cIdx, bIdx);
+                    System.out.println("-> Carte jouée.");
+                    
+                    afficherPlateau(jeu); 
+
+                    // Revendication
+                    while(true) {
+                        System.out.print("Voulez-vous revendiquer une borne ? (o/n) : ");
+                        String rep = scanner.nextLine();
+                        if (!rep.equalsIgnoreCase("o")){
+                            break;
+                        } 
+
+                        System.out.print("Quelle borne (1-9) ? ");
+                        int bRev = Integer.parseInt(scanner.nextLine()) - 1;
+                        try {
+                            boolean gagne = jeu.revendiquerBorne(bRev);
+                            if (gagne){
+                                System.out.println(">>> SUCCÈS ! Borne capturée !");
+                            } 
+                            else {
+                                System.out.println(">>> PERDU ! La borne est à l'adversaire.");
+                            } 
+                        } catch(Exception e) { 
+                            System.out.println(">>> Impossible : " + e.getMessage()); 
+                        }
+                    }
+                    jeu.finirTour();
+                    
+                } catch (NumberFormatException e) {
+                    System.out.println(">>> Erreur : Veuillez entrer un nombre valide.");
+                } catch (Exception e) {
+                    System.out.println(">>> Erreur de jeu : " + e.getMessage());
+                    System.out.println(">>> Recommencez votre tour.");
+                }
+            }
+
+            Joueur grandGagnant = jeu.verifierVictoire();
+            if (grandGagnant != null) {
+                System.out.println("\n=========================================");
+                System.out.println(" VICTOIRE FINALE DE " + grandGagnant.getNom());
+                System.out.println("=========================================");
+                partieTerminee = true;
             }
         }
         scanner.close();
     }
 
-    // Méthode pour afficher joliment les 9 bornes
     private static void afficherPlateau(Jeu jeu) {
         System.out.println("\n=== FRONTIÈRE ===");
         for (Borne b : jeu.getBornes()) {
@@ -92,11 +146,11 @@ public class App {
             if (b.estRevendiquee()) {
                 etatBorne = "[ GAGNÉE PAR " + b.getProprietaire().getNom() + " ]";
             } else {
-                etatBorne = "( Borne " + b.getIndex() + " )";
+                String mode = b.getModeCombat() != null ? " (" + b.getModeCombat() + ")" : "";
+                etatBorne = "( Borne " + b.getIndex() + mode + " )";
             }
 
-            // Affichage : J1 [cartes] -- (Borne X) -- [cartes] J2
-            System.out.printf("%-40s %-20s %s%n", 
+            System.out.printf("%-40s %-30s %s%n", 
                 "J1 " + j1Cartes, 
                 etatBorne, 
                 "J2 " + j2Cartes);

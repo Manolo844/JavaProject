@@ -35,5 +35,7 @@ public class Pioche {
         Collections.shuffle(this.cartes);
     }
 
-    
+    public void mettreSous(Carte c) {
+        cartes.add(0, c);
+    }
 }

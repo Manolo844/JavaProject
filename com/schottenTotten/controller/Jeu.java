@@ -314,8 +314,17 @@ public class Jeu {
         bornes[bDest].ajouterCartePourJoueur(joueurs.indexOf(j), c);
     }
 
-    public Joueur getJoueurCourant() { return joueurs.get(indexJoueurCourant); }
-    public Borne[] getBornes() { return bornes; }
+    public Joueur getJoueurCourant() { 
+        return joueurs.get(indexJoueurCourant); 
+    }
+    
+    public Borne[] getBornes() { 
+        return bornes; 
+    }
+
+    public List<Joueur> getJoueurs() {
+        return joueurs;
+    }
     
     public Joueur verifierVictoire() {
         int bornesJ1 = 0; int bornesJ2 = 0;

@@ -30,9 +30,15 @@ public class CombinaisonBorne implements Comparable<CombinaisonBorne> {
         for (Carte c : cartes) {
             if (c instanceof CarteTactique) {
                 TypeTactique t = ((CarteTactique) c).getType();
-                if (t == TypeTactique.JOKER) contientJoker = true;
-                else if (t == TypeTactique.ESPION) contientEspion = true;
-                else if (t == TypeTactique.PORTE_BOUCLIER) contientPB = true;
+                if (t == TypeTactique.JOKER) {
+                    contientJoker = true;
+                }
+                else if (t == TypeTactique.ESPION) {
+                    contientEspion = true;
+                }
+                else if (t == TypeTactique.PORTE_BOUCLIER){ 
+                    contientPB = true;
+                }
             }
         }
         if (contientJoker) {
@@ -59,12 +65,21 @@ public class CombinaisonBorne implements Comparable<CombinaisonBorne> {
 
         TypeCombinaison type;
 
-        if (memeCouleur && suite) type = TypeCombinaison.SUITE_COULEUR;
-        else if (memeValeur) type = TypeCombinaison.BRELAN;
-        else if (memeCouleur) type = TypeCombinaison.COULEUR;
-        else if (suite) type = TypeCombinaison.SUITE;
-        else type = TypeCombinaison.SOMME;
-
+        if (memeCouleur && suite){ 
+            type = TypeCombinaison.SUITE_COULEUR;
+        }
+        else if (memeValeur) {
+            type = TypeCombinaison.BRELAN;
+        }
+        else if (memeCouleur){
+            type = TypeCombinaison.COULEUR;
+        }
+        else if (suite) {
+            type = TypeCombinaison.SUITE;
+        }
+        else{
+             type = TypeCombinaison.SOMME;
+        }
         return new CombinaisonBorne(type, somme);
     }
 
@@ -195,9 +210,15 @@ public class CombinaisonBorne implements Comparable<CombinaisonBorne> {
     int v3 = cartes.get(2).getValeur();
 
     // trie pour que v1<v2<v3
-    if (v1 > v2) { int tmp = v1; v1 = v2; v2 = tmp; }
-    if (v2 > v3) { int tmp = v2; v2 = v3; v3 = tmp; }
-    if (v1 > v2) { int tmp = v1; v1 = v2; v2 = tmp; }
+    if (v1 > v2) { 
+        int tmp = v1; v1 = v2; v2 = tmp; 
+    }
+    if (v2 > v3) { 
+        int tmp = v2; v2 = v3; v3 = tmp;
+    }
+    if (v1 > v2) { 
+        int tmp = v1; v1 = v2; v2 = tmp; 
+    }
 
     // suite ou non
     return (v1 + 1 == v2) && (v2 + 1 == v3);

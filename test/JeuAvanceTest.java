@@ -17,11 +17,11 @@ public class JeuAvanceTest {
     @Test
     public void testInitialisationModeTactique() {
         Jeu jeu = new Jeu();
-        // Mode Tactique = true
+        //mode tactique = true
         jeu.initialisationJeu("J1", "J2", true, 1);
         
         Joueur j1 = jeu.getJoueurs().get(0);
-        // Vérifie qu'on a bien 7 cartes
+        // vérifie qu'on a bien 7 cartes
         assertEquals(7, j1.getCartesJoueur().size());
     }
 

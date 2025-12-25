@@ -1,3 +1,5 @@
+/* IA avancée qui se base sur le calcul d'un score sur tous les coups possibles*/
+
 package com.schottenTotten.ai;
 
 import com.schottenTotten.model.*;
@@ -38,7 +40,7 @@ public class JoueurIAAvance extends JoueurIA {
                         meilleurScore = score;
                         meilleurCoup = new int[]{iCarte, iBorne};
                     } 
-                    else if (score == meilleurScore) {
+                    else if (score == meilleurScore) { //éviter le déterminisme en cas d'égalité
                         if (random.nextBoolean()) {
                             meilleurCoup = new int[]{iCarte, iBorne};
                         }
@@ -60,6 +62,7 @@ public class JoueurIAAvance extends JoueurIA {
             return 20; 
         }
 
+        //système de calcul de score, prenant en compte les différentes manières de gagner
         if (mesCartes.isEmpty()) {
             score += carte.getValeur();
 

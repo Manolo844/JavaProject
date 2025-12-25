@@ -67,12 +67,11 @@ public class App {
                     jeu.jouerTourIA(); 
                 } catch (Exception e) {
                     System.out.println("Erreur IA : " + e.getMessage());
-                    // Si l'IA plante (ex: tactique illégale), on passe le tour pour éviter boucle infinie
                     jeu.finirTour(); 
                 }
             } 
             
-            // Humain
+            // humain
             else {
                 System.out.println("\n--- C'est à " + joueurActuel.getNom() + " de jouer ---");
                 
@@ -93,7 +92,7 @@ public class App {
                     
                     afficherPlateau(jeu); 
 
-                    // Revendication
+                    // revendication
                     while(true) {
                         System.out.print("Voulez-vous revendiquer une borne ? (o/n) : ");
                         String rep = scanner.nextLine();

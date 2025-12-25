@@ -22,7 +22,7 @@ public class InteractionConsole {
         try {
             return Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
-            return -1; // Retourne -1 en cas d'erreur de saisie
+            return -1; 
         }
     }
 

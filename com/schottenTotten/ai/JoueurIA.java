@@ -1,3 +1,5 @@
+/* Joueur IA, random par défaut */
+
 package com.schottenTotten.ai;
 
 import com.schottenTotten.model.*;
@@ -14,7 +16,7 @@ public class JoueurIA extends Joueur {
         this.random = new Random();
     }
 
-   
+
     public int[] reflechirCoup(Borne[] bornes, int monIndex, int tactiquesMoi, int tactiquesAutre) {
     
         List<Integer> bornesValides = new ArrayList<>();
@@ -29,6 +31,7 @@ public class JoueurIA extends Joueur {
             return null; 
         }
 
+        //logique de gestion d'erreurs, pour éviter le blocage du plateau par l'IA
         for(int k=0; k<100; k++) {
             int iCarte = random.nextInt(cartesJoueur.size());
             Carte c = cartesJoueur.get(iCarte);

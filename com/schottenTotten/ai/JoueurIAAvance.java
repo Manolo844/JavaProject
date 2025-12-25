@@ -66,12 +66,12 @@ public class JoueurIAAvance extends JoueurIA {
         if (mesCartes.isEmpty()) {
             score += carte.getValeur();
 
-            if (carte.getValeur() == 9) score += 30;
-            else if (carte.getValeur() == 8) score += 20;
-            else if (carte.getValeur() >= 6) score += 10;
+            if (carte.getValeur() == 9) score += 28;
+            else if (carte.getValeur() == 8) score += 18;
+            else if (carte.getValeur() >= 6) score += 9;
 
             if (!cartesAdversaire.isEmpty()) {
-                score += 15;
+                score += 12;
             }
             
             return score;
@@ -87,16 +87,16 @@ public class JoueurIAAvance extends JoueurIA {
                 boolean valeursProches = Math.abs(cPosee.getValeur() - carte.getValeur()) == 1;
 
                 if (memeCouleur && valeursProches) {
-                    score += 60;
+                    score += 75;
                 }
                 else if (memeValeur) {
-                    score += 40;
+                    score += 45;
                 }
                 else if (memeCouleur) {
-                    score += 5;
+                    score += 8;
                 }
                 else if (valeursProches) {
-                    score += 2;
+                    score += 3;
                 }
             }
         }

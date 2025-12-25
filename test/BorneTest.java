@@ -1,6 +1,6 @@
 /**
  * Test unitaire de la logique de résolution des bornes.
- * On simule une situation de conflit (ici un Brelan contre une Somme) pour vérifier
+ * On simule des situations de conflit pour vérifier
  * que l'algorithme désigne le bon vainqueur et verrouille la borne.
  */
 
@@ -26,4 +26,40 @@ public class BorneTest {
         assertTrue(borne.estComplete());
         assertEquals(0, borne.determinerGagnantLocal());
     }
+    
+    @Test
+    public void testSuiteCouleurBatBrelan() {
+        Borne borne = new Borne(2);
+        
+        // brelan de 9 
+        borne.ajouterCartePourJoueur(0, new CarteClan(Couleur.ROUGE, 9));
+        borne.ajouterCartePourJoueur(0, new CarteClan(Couleur.VERT, 9));
+        borne.ajouterCartePourJoueur(0, new CarteClan(Couleur.BLEU, 9));
+
+        // suite-couleur (1, 2, 3 ROUGE) 
+        borne.ajouterCartePourJoueur(1, new CarteClan(Couleur.ROUGE, 1));
+        borne.ajouterCartePourJoueur(1, new CarteClan(Couleur.ROUGE, 2));
+        borne.ajouterCartePourJoueur(1, new CarteClan(Couleur.ROUGE, 3));
+
+        assertTrue(borne.estComplete());
+        assertEquals(1, borne.determinerGagnantLocal());
+    }
+    
+    @Test
+    public void testEgaliteParfaitePremierArrive() {
+        Borne borne = new Borne(3);
+
+        borne.ajouterCartePourJoueur(0, new CarteClan(Couleur.ROUGE, 5));
+        borne.ajouterCartePourJoueur(0, new CarteClan(Couleur.VERT, 7));
+        borne.ajouterCartePourJoueur(0, new CarteClan(Couleur.BLEU, 0)); 
+        borne.ajouterCartePourJoueur(1, new CarteClan(Couleur.JAUNE, 5));
+        borne.ajouterCartePourJoueur(1, new CarteClan(Couleur.MAUVE, 7));
+        borne.ajouterCartePourJoueur(1, new CarteClan(Couleur.MARRON, 0)); 
+
+        assertTrue(borne.estComplete());
+        assertEquals(0, borne.determinerGagnantLocal());
+    }
+    
+    
+    
 }

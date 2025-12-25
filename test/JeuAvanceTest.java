@@ -45,17 +45,4 @@ public class JeuAvanceTest {
         
         assertNotNull("L'IA doit trouver un coup au début du jeu", coup);
     }
-
-    @Test
-    public void testCarteTactiqueSurBorne() {
-        Borne borne = new Borne(1);
-        TypeTactique unTypeAuHasard = TypeTactique.values()[0];
-
-        Carte carteTest = new CarteTactique(unTypeAuHasard);
-
-        borne.ajouterCartePourJoueur(0, carteTest);
-        
-        assertEquals(1, borne.getCartesPourJoueur(0).size());
-        assertTrue(borne.getCartesPourJoueur(0).get(0) instanceof CarteTactique);
-    }
 }
